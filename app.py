@@ -3,7 +3,7 @@ import tensorflow as tf
 import numpy as np
 from PIL import Image
 from gtts import gTTS
-from googletrans import Translator
+from deep_translator import GoogleTranslator
 from io import BytesIO
 from tensorflow.keras.applications.efficientnet import preprocess_input
 
@@ -96,7 +96,6 @@ def load_model():
     return tf.keras.models.load_model("EfficientNet_plant_disease_model.keras")
 
 model = load_model()
-translator = Translator()
 
 # ============================================================
 # LANGUAGE OPTIONS & TRANSLATIONS
@@ -430,15 +429,15 @@ if st.session_state.page == 'Home':
                 english_suggestion = suggestions_dict.get(predicted_class, suggestions_dict["Default"])
                 
                 try:
-                    translated_text = translator.translate(english_suggestion, src="en", dest=target_lang).text
+                    translator = GoogleTranslator(source='en', target=target_lang)
+                    translated_text = translator.translate(english_suggestion)
                 except:
                     translated_text = t['translation_error']
 
                 # Translate disease name and label into selected language
                 try:
-                    translated_disease_text = translator.translate(
-                        f"Disease Detected: {predicted_class}", src="en", dest=target_lang
-                    ).text
+                    translator = GoogleTranslator(source='en', target=target_lang)
+                    translated_disease_text = translator.translate(f"Disease Detected: {predicted_class}")
                 except:
                     translated_disease_text = f"Disease Detected: {predicted_class}"
 
