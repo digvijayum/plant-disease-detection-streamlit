@@ -8,3 +8,4 @@ scikit-learn
 requests
 gdown
 pandas
+gtts
